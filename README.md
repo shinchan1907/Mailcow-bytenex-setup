@@ -49,22 +49,42 @@ sudo apt install docker-compose-plugin
 
 ### 4. Setup Mailcow
 ```bash
+# Workspace setup
 cd /opt
 sudo git clone https://github.com/mailcow/mailcow-dockerized
 cd mailcow-dockerized
 
-# Use the pre-configured mailcow.conf from this repo
-# Or generate a new one:
-./generate_config.sh
+# 1. Ensure scripts are executable
+sudo chmod +x generate_config.sh update.sh helper-scripts/*.sh
+
+# 2. Run the configuration generator
+# Enter your hostname (mail.bytenex.io) when prompted
+sudo ./generate_config.sh
+
+# 3. Copy our production scripts to the correct location
+sudo mkdir -p /opt/mailcow-dockerized/scripts
+# Assuming you cloned your setup repo to ~/Mailcow-bytenex-setup
+sudo cp ~/Mailcow-bytenex-setup/scripts/backup_mailcow.sh /opt/mailcow-dockerized/scripts/
+sudo chmod +x /opt/mailcow-dockerized/scripts/backup_mailcow.sh
+
+# 4. Copy the production override if needed
+sudo cp ~/Mailcow-bytenex-setup/docker-compose.override.yml /opt/mailcow-dockerized/
 ```
 
 ### 5. Memory Optimization (For 4GB RAM Instances)
 If you experience crashes, disable ClamAV and Solr in `mailcow.conf`:
 ```bash
+# Edit the config
+nano mailcow.conf
+
+# Find and change these values:
 SKIP_CLAMD=y
 SKIP_SOLR=y
 ```
-Then restart: `docker compose up -d`.
+Then start the containers: 
+```bash
+sudo docker compose up -d
+```
 
 ---
 
