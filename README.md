@@ -38,50 +38,35 @@ For mail delivery to work (to avoid being marked as spam):
 1. Go to the Lightsail console -> **Networking** tab.
 2. Edit **Reverse DNS** and set it to `mail.bytenex.io`.
 
-### 3. System Preparation
+### 3. System Preparation (Prerequisites)
+Run these commands to install the necessary tools for Mailcow:
 ```bash
 sudo apt update && sudo apt upgrade -y
+
+# Install Core Requirements
+sudo apt install curl git jq -y
+
+# Install Docker
 curl -sSL https://get.docker.com/ | CHANNEL=stable sh
 sudo systemctl enable --now docker
+
 # Install Docker Compose (V2)
 sudo apt install docker-compose-plugin
 ```
 
-### 4. Setup Mailcow (Official Installation)
-
-**⚠️ STOP:** Do not run these inside the `Mailcow-bytenex-setup` folder. Follow these commands exactly:
+### 4. Setup Mailcow (Single Repo Method)
+Run these commands inside your `Mailcow-bytenex-setup` folder:
 
 ```bash
-# ---------------------------------------------------------
-# STEP A: MOVE TO /OPT AND CLONE OFFICIAL MAILCOW
-# ---------------------------------------------------------
-cd /opt
-sudo git clone https://github.com/mailcow/mailcow-dockerized
-cd mailcow-dockerized
+# 1. Pull the Mailcow engine into your folder
+curl -L https://github.com/mailcow/mailcow-dockerized/archive/master.tar.gz | tar xz --strip-components=1
 
-# ---------------------------------------------------------
-# STEP B: FIX PERMISSIONS (Now that you are in the right folder)
-# ---------------------------------------------------------
+# 2. Set permissions
 sudo chmod +x generate_config.sh update.sh helper-scripts/*.sh
 
-# ---------------------------------------------------------
-# STEP C: GENERATE CONFIG
-# ---------------------------------------------------------
-# Use: mail.bytenex.io as the hostname
+# 3. Generate your production config
+# IMPORTANT: Enter 'mail.bytenex.io' when it asks for hostname
 sudo ./generate_config.sh
-
-# ---------------------------------------------------------
-# STEP D: COPY OUR PRODUCTION FILES FROM THE SETUP REPO
-# ---------------------------------------------------------
-# 1. Backups
-sudo mkdir -p /opt/mailcow-dockerized/scripts
-# Assuming you cloned your setup repo to ~/Mailcow-bytenex-setup
-# git clone https://github.com/shinchan1907/Mailcow-bytenex-setup ~/Mailcow-bytenex-setup
-sudo cp ~/Mailcow-bytenex-setup/scripts/backup_mailcow.sh /opt/mailcow-dockerized/scripts/
-sudo chmod +x /opt/mailcow-dockerized/scripts/backup_mailcow.sh
-
-# 2. Resource Limits Override
-sudo cp ~/Mailcow-bytenex-setup/docker-compose.override.yml /opt/mailcow-dockerized/
 ```
 
 ### 5. Memory Optimization (For 4GB RAM Instances)
