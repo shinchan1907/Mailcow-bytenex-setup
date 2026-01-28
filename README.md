@@ -71,10 +71,12 @@ sudo chmod +x generate_config.sh update.sh helper-scripts/*.sh
 sudo ./generate_config.sh
 
 # ---------------------------------------------------------
-# STEP D: COPY OUR PRODUCTION FILES FROM ~/Mailcow-bytenex-setup
+# STEP D: COPY OUR PRODUCTION FILES FROM THE SETUP REPO
 # ---------------------------------------------------------
 # 1. Backups
 sudo mkdir -p /opt/mailcow-dockerized/scripts
+# Assuming you cloned your setup repo to ~/Mailcow-bytenex-setup
+# git clone https://github.com/shinchan1907/Mailcow-bytenex-setup ~/Mailcow-bytenex-setup
 sudo cp ~/Mailcow-bytenex-setup/scripts/backup_mailcow.sh /opt/mailcow-dockerized/scripts/
 sudo chmod +x /opt/mailcow-dockerized/scripts/backup_mailcow.sh
 
