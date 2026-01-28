@@ -47,27 +47,38 @@ sudo systemctl enable --now docker
 sudo apt install docker-compose-plugin
 ```
 
-### 4. Setup Mailcow
+### 4. Setup Mailcow (Official Installation)
+
+**⚠️ STOP:** Do not run these inside the `Mailcow-bytenex-setup` folder. Follow these commands exactly:
+
 ```bash
-# Workspace setup
+# ---------------------------------------------------------
+# STEP A: MOVE TO /OPT AND CLONE OFFICIAL MAILCOW
+# ---------------------------------------------------------
 cd /opt
 sudo git clone https://github.com/mailcow/mailcow-dockerized
 cd mailcow-dockerized
 
-# 1. Ensure scripts are executable
+# ---------------------------------------------------------
+# STEP B: FIX PERMISSIONS (Now that you are in the right folder)
+# ---------------------------------------------------------
 sudo chmod +x generate_config.sh update.sh helper-scripts/*.sh
 
-# 2. Run the configuration generator
-# Enter your hostname (mail.bytenex.io) when prompted
+# ---------------------------------------------------------
+# STEP C: GENERATE CONFIG
+# ---------------------------------------------------------
+# Use: mail.bytenex.io as the hostname
 sudo ./generate_config.sh
 
-# 3. Copy our production scripts to the correct location
+# ---------------------------------------------------------
+# STEP D: COPY OUR PRODUCTION FILES FROM ~/Mailcow-bytenex-setup
+# ---------------------------------------------------------
+# 1. Backups
 sudo mkdir -p /opt/mailcow-dockerized/scripts
-# Assuming you cloned your setup repo to ~/Mailcow-bytenex-setup
 sudo cp ~/Mailcow-bytenex-setup/scripts/backup_mailcow.sh /opt/mailcow-dockerized/scripts/
 sudo chmod +x /opt/mailcow-dockerized/scripts/backup_mailcow.sh
 
-# 4. Copy the production override if needed
+# 2. Resource Limits Override
 sudo cp ~/Mailcow-bytenex-setup/docker-compose.override.yml /opt/mailcow-dockerized/
 ```
 
