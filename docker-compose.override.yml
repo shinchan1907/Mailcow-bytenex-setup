@@ -1,0 +1,22 @@
+# Production Overrides for Mailcow
+services:
+  # Limit memory usage for intensive services if on a 4GB RAM instance
+  clamd-mailcow:
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+  
+  solr-mailcow:
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+
+  # Ensure logs are handled properly
+  php-fpm-mailcow:
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
